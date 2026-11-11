@@ -1,0 +1,58 @@
+app-id: io.github.ryth9419_jpg.Unoffical-twitch-client
+runtime: org.freedesktop.Platform
+runtime-version: '26.08'
+sdk: org.freedesktop.Sdk
+base: org.electronjs.Electron2.BaseApp
+base-version: '26.08'
+command: unofficial-twitch-client
+separate-locales: false
+finish-args:
+  - --share=ipc
+  - --share=network
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --socket=pulseaudio
+  - --device=dri
+  # Saved streams and downloaded VODs (default save folder is ~/Videos/Twitch)
+  - --filesystem=xdg-videos/Twitch:create
+  # Tray icon
+  - --talk-name=org.kde.StatusNotifierWatcher
+  # "Log in with Firefox" reads Twitch cookies from these profiles, read-only
+  - --filesystem=~/.mozilla/firefox:ro
+  - --filesystem=xdg-config/mozilla/firefox:ro
+  - --filesystem=~/.var/app/org.mozilla.firefox:ro
+  - --filesystem=~/snap/firefox/common/.mozilla/firefox:ro
+  - --filesystem=~/.librewolf:ro
+  - --filesystem=~/.var/app/io.gitlab.librewolf-community:ro
+  - --env=ELECTRON_TRASH=gio
+
+modules:
+  - name: unofficial-twitch-client
+    buildsystem: simple
+    build-commands:
+      # Electron runtime
+      - mkdir -p /app/electron && bsdtar -xf electron.zip -C /app/electron
+      # App code + runtime npm dependencies (offline, pinned by package-lock.json)
+      - install -Dm644 -t /app/main main.js preload-host.js preload-twitch.js preload-sniff.js index.html renderer.js package.json
+      - install -Dm644 build/icon.png /app/main/build/icon.png
+      - cp -a node_modules /app/main/
+      # Launcher, desktop entry, icon, metainfo
+      - install -Dm755 flatpak/unofficial-twitch-client.sh /app/bin/unofficial-twitch-client
+      - install -Dm644 flatpak/${FLATPAK_ID}.desktop -t /app/share/applications
+      - install -Dm644 flatpak/${FLATPAK_ID}.metainfo.xml -t /app/share/metainfo
+      - install -Dm644 build/icon.png /app/share/icons/hicolor/512x512/apps/${FLATPAK_ID}.png
+    sources:
+      - type: dir
+        path: ..
+        skip: [flatpak/.flatpak-builder, flatpak/build-dir, flatpak/repo]
+      - type: file
+        only-arches: [x86_64]
+        url: https://github.com/electron/electron/releases/download/v33.4.11/electron-v33.4.11-linux-x64.zip
+        sha256: 212d431c7c916292311c797cd91f84467c5abd6e6983cf24b162efff64cee8a9
+        dest-filename: electron.zip
+      - type: file
+        only-arches: [aarch64]
+        url: https://github.com/electron/electron/releases/download/v33.4.11/electron-v33.4.11-linux-arm64.zip
+        sha256: e865132767e0930f5fef8ee146b9dd83c7f8fb95ed533c4de99e7057d5de5b61
+        dest-filename: electron.zip
+      - npm-sources.json

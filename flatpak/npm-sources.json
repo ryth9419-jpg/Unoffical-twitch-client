@@ -1,0 +1,86 @@
+[
+  {
+    "type": "archive",
+    "url": "https://registry.npmjs.org/@ghostery/adblocker/-/adblocker-2.20.3.tgz",
+    "sha512": "5b1bfe462a9f0fec585628fd824b9d53a9c36fe7aa6dfbb6ae80d96b4aeda95c36a889b4202c449e4aec814c9f670efe2fedcf7c8d8fb331d941ea02911d42b8",
+    "dest": "node_modules/@ghostery/adblocker"
+  },
+  {
+    "type": "archive",
+    "url": "https://registry.npmjs.org/@ghostery/adblocker-content/-/adblocker-content-2.20.3.tgz",
+    "sha512": "b6e5784f9c0f6df55d718e9d9ccd5d7da5d26b3a52b71ed9239e1b77697dafddf23d97d9a15b074755317ff03c11304c5c93d0f7624c0d0ce657c84e829caafb",
+    "dest": "node_modules/@ghostery/adblocker-content"
+  },
+  {
+    "type": "archive",
+    "url": "https://registry.npmjs.org/@ghostery/adblocker-electron/-/adblocker-electron-2.20.3.tgz",
+    "sha512": "33cf7111487a3eb491674614440ed16ba5b3f49aeb35924841cadf981dcd7e97499f5aaf7b71b295c1ecb5ce768aa260caabced31903d3705cb7231d4d1592ec",
+    "dest": "node_modules/@ghostery/adblocker-electron"
+  },
+  {
+    "type": "archive",
+    "url": "https://registry.npmjs.org/@ghostery/adblocker-electron-preload/-/adblocker-electron-preload-2.20.3.tgz",
+    "sha512": "dfbe14b55ec1f57b8deb1f338497f43aa150fc960901978b16eb10f1d6a7be481fedfcfa624056321af781fc4e0c50915c673df5e6216e8879408caf3c88277c",
+    "dest": "node_modules/@ghostery/adblocker-electron-preload"
+  },
+  {
+    "type": "archive",
+    "url": "https://registry.npmjs.org/@ghostery/adblocker-extended-selectors/-/adblocker-extended-selectors-2.20.3.tgz",
+    "sha512": "7309687bc1970a888ba2bebce5f382b31dcfc8316fb159d87423bf30c0326780ebe6af1c8121e28eaa98494d9f5a0a167f3d4585f7a98fb9866d09ebbd4477ef",
+    "dest": "node_modules/@ghostery/adblocker-extended-selectors"
+  },
+  {
+    "type": "archive",
+    "url": "https://registry.npmjs.org/@ghostery/url-parser/-/url-parser-1.3.1.tgz",
+    "sha512": "40aa868beeda0d0e117321f20b080493a07dbd69ec04fe10ee1b5a374ccf255dc04ea4ca1100ed4936fd73f00de7cea82540ecdb861729cc05630370798fd88d",
+    "dest": "node_modules/@ghostery/url-parser"
+  },
+  {
+    "type": "archive",
+    "url": "https://registry.npmjs.org/@remusao/guess-url-type/-/guess-url-type-2.1.0.tgz",
+    "sha512": "cc8ddd953531a63bf1d860b1a7d9cb3922b9c8422a0c2a71940546c1bd98e3d44a912ef6a1e35ac71a3e5564b9f97439f8c7fc65fa7d65722593e1b97a810df0",
+    "dest": "node_modules/@remusao/guess-url-type"
+  },
+  {
+    "type": "archive",
+    "url": "https://registry.npmjs.org/@remusao/small/-/small-2.1.0.tgz",
+    "sha512": "6359328d9a7b254edd5ddc8e7711d535fa13af55cb6494f240fdfafdeb19514fd6456abd5d8d0f5761ec1370ac207b9a4dfe29be05afda9bf3be767ffd41c825",
+    "dest": "node_modules/@remusao/small"
+  },
+  {
+    "type": "archive",
+    "url": "https://registry.npmjs.org/@remusao/smaz/-/smaz-2.2.0.tgz",
+    "sha512": "79277742cd042cffdeeed535488e515977029fd2a30e0bc163e2ad59b2f88b642fbc784939f748b78bf4000dd2e416cb580af9742102ec2e0b51fa200e6eaafd",
+    "dest": "node_modules/@remusao/smaz"
+  },
+  {
+    "type": "archive",
+    "url": "https://registry.npmjs.org/@remusao/smaz-compress/-/smaz-compress-2.2.0.tgz",
+    "sha512": "4d7a533e020b45460eb76ac47b4fbd3c2d76c542cfbc1a9e3299a2a7307d03ba0ce1f6bd66dbf2f652d8ccf4ddeed89011ea0d6b5a66c6286929f26db319ccff",
+    "dest": "node_modules/@remusao/smaz-compress"
+  },
+  {
+    "type": "archive",
+    "url": "https://registry.npmjs.org/@remusao/smaz-decompress/-/smaz-decompress-2.2.0.tgz",
+    "sha512": "11100fc313da034ff2838864354ed3d92fa59e9f638f5b00a5c40cb4ec913af390ca8f99ba1e879ffa11717afc9a68e5633c91682ec4eabde64f59eb74747aa6",
+    "dest": "node_modules/@remusao/smaz-decompress"
+  },
+  {
+    "type": "archive",
+    "url": "https://registry.npmjs.org/@remusao/trie/-/trie-2.1.0.tgz",
+    "sha512": "12bdd0f2ad3fd8e70224f41824e3cb982baa3b4c2eedc6afdd23eda6397149b8c58b5c7e035a599242c3e9cf6adab1849065bfb64ad1cdfae134cb7c5508f35e",
+    "dest": "node_modules/@remusao/trie"
+  },
+  {
+    "type": "archive",
+    "url": "https://registry.npmjs.org/tldts-core/-/tldts-core-7.4.21.tgz",
+    "sha512": "b23f1b00e8d8bbd8ee3ca82c077039f148fdd726dc9ec4738045316c418008fdf6adf279a3d11271ead121f5f573a18f0a2425328cb8ac2bb6a935484202f850",
+    "dest": "node_modules/tldts-core"
+  },
+  {
+    "type": "archive",
+    "url": "https://registry.npmjs.org/tldts-experimental/-/tldts-experimental-7.4.21.tgz",
+    "sha512": "e8ebdcb7fab63c3f17f4026c4b07b487be83f20e563ce2c4c6b091f304ed55acf1a785b55eea6d85c7e816a2b7dd5fc3bd2ab796ec81f96cef113b092612085c",
+    "dest": "node_modules/tldts-experimental"
+  }
+]

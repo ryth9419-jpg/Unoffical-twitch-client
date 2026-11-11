@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Unofficial Twitch Client
+GenericName=Twitch Client
+Comment=Watch Twitch with live notifications, lower delay and stream saving
+Exec=unofficial-twitch-client %U
+Icon=io.github.ryth9419_jpg.Unoffical-twitch-client
+Terminal=false
+Categories=AudioVideo;Video;Network;
+Keywords=twitch;stream;live;chat;
+StartupWMClass=Twitch
