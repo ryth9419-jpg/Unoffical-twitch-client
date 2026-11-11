@@ -1,0 +1,38 @@
+{
+  "name": "twitchwatch",
+  "productName": "Twitch",
+  "version": "1.0.0",
+  "description": "Twitch client for Linux: chat, low-latency player, live notifications, ad stripping, stream saving",
+  "main": "main.js",
+  "author": "you",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --linux AppImage"
+  },
+  "dependencies": {
+    "@ghostery/adblocker-electron": "^2.0.0"
+  },
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.local.twitchapp",
+    "productName": "Twitch",
+    "files": [
+      "main.js",
+      "preload-host.js",
+      "preload-twitch.js",
+      "preload-sniff.js",
+      "index.html",
+      "renderer.js",
+      "build/icon.png"
+    ],
+    "linux": {
+      "target": "AppImage",
+      "category": "Video",
+      "icon": "build/icon.png"
+    }
+  }
+}

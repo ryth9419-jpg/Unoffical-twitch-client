@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https://static-cdn.jtvnw.net https://*.twitch.tv; style-src 'self' 'unsafe-inline'; script-src 'self'">
+<title>Twitch</title>
+<style>
+  :root {
+    --bg: #f4f4f7; --side: #ffffff; --panel: #ffffff; --sunk: #ecebf0; --line: #e1dfe7;
+    --text: #1d1b22; --muted: #6d6878; --accent: #7c3aed; --accent-ink: #ffffff;
+    --live: #1f9d63; --warn: #c27c0e; --rec: #e5484d; --hover: #f0eef5;
+    --r-s: 6px; --r-m: 10px;
+    color-scheme: light;
+  }
+  [data-theme="dark"] {
+    --bg: #17161c; --side: #1d1c23; --panel: #222029; --sunk: #2a2832; --line: #34313d;
+    --text: #e9e6f0; --muted: #9a95a8; --accent: #a78bfa; --accent-ink: #17161c;
+    --live: #3ddc97; --warn: #f5b84a; --rec: #ff5d6a; --hover: #2a2832;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
+    font: 14px/1.45 Cantarell, "Noto Sans", system-ui, sans-serif; overflow: hidden; }
+  button, input, select { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  [hidden] { display: none !important; }
+  img.av { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; background: var(--sunk); flex: none; }
+  .ph { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--sunk);
+    color: var(--muted); font-weight: 700; flex: none; }
+
+  .app { display: grid; grid-template-columns: 272px 1fr; height: 100%; }
+
+  /* ---------- sidebar ---------- */
+  aside { background: var(--side); border-right: 1px solid var(--line); display: flex; flex-direction: column; min-height: 0; }
+  .brand { display: flex; align-items: center; gap: 10px; padding: 18px 20px 14px; }
+  .brand svg { width: 34px; height: 34px; }
+  .brand b { font-size: 24px; font-weight: 800; letter-spacing: -.03em; }
+  .navs { padding: 4px 12px 8px; display: grid; gap: 2px; }
+  .nav { display: flex; align-items: center; gap: 10px; width: 100%; height: 38px; padding: 0 10px; border: 0;
+    background: transparent; border-radius: var(--r-s); cursor: pointer; text-align: left; font-weight: 600; }
+  .nav:hover, .nav.on { background: var(--hover); }
+  .nav .ico { width: 18px; text-align: center; color: var(--accent); }
+  .nav kbd { margin-left: auto; font: 11px/1 inherit; color: var(--muted); border: 1px solid var(--line);
+    border-radius: 4px; padding: 3px 5px; }
+  .nav .count { margin-left: auto; font-size: 12px; color: var(--muted); font-weight: 400; }
+  .scroll { flex: 1; overflow-y: auto; padding: 4px 12px 12px; min-height: 0; }
+  .group { display: flex; align-items: center; justify-content: space-between; margin: 14px 10px 6px;
+    font-size: 12px; font-weight: 700; color: var(--muted); }
+  .group button { border: 0; background: none; color: var(--muted); cursor: pointer; font: inherit; padding: 0; }
+  .ch { display: flex; align-items: center; gap: 10px; width: 100%; padding: 7px 10px; border: 0; background: transparent;
+    border-radius: var(--r-s); cursor: pointer; text-align: left; }
+  .ch:hover { background: var(--hover); }
+  .ch.on { background: var(--hover); box-shadow: inset 3px 0 0 var(--accent); }
+  .ch .who { flex: 1; min-width: 0; }
+  .ch .nm { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ch .sub { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .filter { width: calc(100% - 20px); margin: 0 10px 6px; height: 32px; padding: 0 10px; border-radius: var(--r-s);
+    border: 1px solid var(--line); background: var(--bg); }
+  .ch .rm { width: 24px; height: 24px; border: 0; border-radius: 50%; background: transparent; color: var(--muted);
+    font-size: 18px; line-height: 1; cursor: pointer; flex: none; display: grid; place-items: center; opacity: .55; }
+  .ch:hover .rm, .ch .rm:focus-visible { opacity: 1; }
+  .ch .rm:hover { background: var(--sunk); color: var(--rec); }
+  .ch .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--line); flex: none; }
+  .ch .dot.live { background: var(--live); }
+  .ch.off { opacity: .7; }
+  .hint { color: var(--muted); font-size: 13px; padding: 4px 10px; }
+  .me { border-top: 1px solid var(--line); padding: 12px 14px; display: flex; align-items: center; gap: 10px; }
+  .me .who { flex: 1; min-width: 0; }
+  .me .nm { font-weight: 700; }
+  .me .sub { font-size: 12px; color: var(--muted); }
+  .iconbtn { width: 34px; height: 34px; border: 0; border-radius: var(--r-s); background: transparent; cursor: pointer;
+    color: var(--muted); font-size: 17px; display: grid; place-items: center; flex: none; }
+  .iconbtn:hover { background: var(--hover); color: var(--text); }
+
+  /* ---------- buttons ---------- */
+  .btn { height: 34px; padding: 0 12px; border-radius: var(--r-s); border: 1px solid var(--line); background: var(--panel);
+    cursor: pointer; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+  .btn:hover { border-color: var(--accent); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 700; }
+  .btn.on { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+  .btn.follow { font-weight: 700; }
+  .btn.follow.on { background: var(--sunk); border-color: var(--line); color: var(--text); }
+  .btn.sub { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+  .btn.sub.subbed { background: var(--accent); color: var(--accent-ink); }
+  .subcard { display: flex; flex-direction: column; gap: 10px; padding: 14px; border-radius: var(--r-m); background: var(--panel);
+    border: 1px solid var(--line); min-width: 0; }
+  .subcard .top { display: flex; gap: 12px; align-items: center; cursor: pointer; border: 0; background: none; padding: 0; text-align: left; }
+  .subcard .top:hover .t { color: var(--accent); }
+  .subcard .who { min-width: 0; flex: 1; }
+  .subcard .t { font-weight: 700; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .subcard .m { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .subcard .m.live { color: var(--rec); font-weight: 700; }
+  .tierchip { font-size: 11px; font-weight: 700; color: var(--accent); border: 1px solid var(--accent); border-radius: 999px; padding: 1px 8px; white-space: nowrap; }
+  .btn.rec.on { border-color: var(--rec); color: var(--rec); }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: var(--r-s); overflow: hidden; }
+  .seg button { height: 32px; border: 0; background: var(--panel); padding: 0 12px; cursor: pointer; color: var(--muted); }
+  .seg button[aria-pressed="true"] { background: var(--sunk); color: var(--text); font-weight: 600; }
+  select { height: 32px; border-radius: var(--r-s); border: 1px solid var(--line); background: var(--panel); padding: 0 8px; }
+
+  /* ---------- main ---------- */
+  main { position: relative; min-width: 0; min-height: 0; }
+  .view { position: absolute; inset: 0; display: flex; flex-direction: column; min-height: 0; }
+  .head { display: flex; align-items: center; gap: 16px; padding: 14px 22px; border-bottom: 1px solid var(--line); background: var(--panel); }
+  .head img.big { width: 56px; height: 56px; border-radius: var(--r-m); object-fit: cover; background: var(--sunk); }
+  .head .info { flex: 1; min-width: 0; }
+  .head h1 { margin: 0; font-size: 21px; line-height: 1.2; }
+  .head .title { color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
+  .stats { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 6px; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .stats .liveTag { color: var(--rec); font-weight: 700; }
+  .chip { border: 1px solid var(--line); border-radius: 999px; padding: 1px 10px; font-size: 12px; color: var(--text); }
+  .actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+  .recstate { font-size: 12px; color: var(--muted); max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .recstate.live { color: var(--rec); font-weight: 700; }
+
+  .stage { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(280px, 1fr) 8px var(--vw, 58%); }
+  .stage.novideo { grid-template-columns: 1fr 0 0; }
+  .stage.novideo .split, .stage.novideo .video { display: none; }
+  .chat { position: relative; min-width: 0; background: var(--panel); }
+  .chat webview, .playerbox webview { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .chatcol { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+  .chatcol .chat { flex: 1; }
+  .votebar { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 16px; border: 0; cursor: pointer;
+    background: var(--accent); color: var(--accent-ink); text-align: left; }
+  .votebar:hover { filter: brightness(1.08); }
+  .vb-ico { font-size: 22px; }
+  .vb-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  .vb-txt span { font-size: 12px; opacity: .9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .vb-go { background: var(--accent-ink); color: var(--accent); font-weight: 800; padding: 6px 14px; border-radius: 999px; white-space: nowrap; }
+  .split { cursor: col-resize; background: var(--bg); position: relative; }
+  .split::after { content: ""; position: absolute; top: 50%; left: 3px; width: 2px; height: 40px; margin-top: -20px; border-radius: 1px; background: var(--line); }
+  .dragging webview { pointer-events: none; }
+  .video { display: flex; flex-direction: column; padding: 12px; gap: 10px; min-width: 0; background: var(--bg); }
+  .playerbox { position: relative; flex: 1; min-height: 200px; border-radius: var(--r-m); overflow: hidden; background: #000; }
+  .pctl { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .pctl .label { font-weight: 700; margin-right: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+
+  .lag { height: 32px; min-width: 88px; padding: 0 12px; border-radius: 16px; border: 0; cursor: pointer; font-weight: 800;
+    font-variant-numeric: tabular-nums; background: var(--sunk); color: var(--muted); transition: background .25s, color .25s; }
+  .lag.good { background: color-mix(in srgb, var(--live) 16%, transparent); color: var(--live); }
+  .lag.warn { background: color-mix(in srgb, var(--warn) 18%, transparent); color: var(--warn); }
+  .lag.bad { background: color-mix(in srgb, var(--rec) 18%, transparent); color: var(--rec); }
+  .shield { font-size: 12px; color: var(--muted); }
+
+  .page { flex: 1; overflow-y: auto; padding: 26px 30px 40px; }
+  .page h2 { font-size: 20px; margin: 0 0 4px; }
+  .page .lead { color: var(--muted); margin: 0 0 18px; }
+  .page h3 { font-size: 15px; margin: 26px 0 12px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 18px; }
+  .card { border: 0; padding: 0; background: none; text-align: left; cursor: pointer; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .thumb { position: relative; aspect-ratio: 16 / 9; border-radius: var(--r-m); overflow: hidden; background: var(--sunk); }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .thumb .badge { position: absolute; left: 8px; bottom: 8px; background: rgba(0,0,0,.72); color: #fff; font-size: 12px;
+    padding: 2px 7px; border-radius: 4px; font-variant-numeric: tabular-nums; }
+  .card:hover .thumb { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .card .row { display: flex; gap: 10px; min-width: 0; }
+  .card .t { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card .m { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card .who { min-width: 0; }
+  .card-acts { display: flex; gap: 6px; }
+  .searchbar { display: flex; gap: 8px; max-width: 640px; margin-bottom: 6px; }
+  .searchbar input { flex: 1; height: 40px; padding: 0 14px; border-radius: var(--r-s); border: 1px solid var(--line);
+    background: var(--panel); font-size: 15px; }
+  .searchbar .btn { height: 40px; }
+  .followcard { display: flex; gap: 10px; align-items: center; padding: 10px 12px; border-radius: var(--r-m); background: var(--panel);
+    border: 1px solid var(--line); cursor: pointer; text-align: left; min-width: 0; }
+  .followcard:hover { border-color: var(--accent); }
+
+  .list { display: grid; gap: 4px; max-width: 1000px; }
+  .item { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 12px 14px; background: var(--panel);
+    border: 1px solid var(--line); border-radius: var(--r-s); }
+  .item .nm { font-weight: 600; overflow-wrap: anywhere; }
+  .item .m { color: var(--muted); font-size: 12px; margin-top: 2px; }
+  .item .reclive { color: var(--rec); font-weight: 700; }
+  .item .acts { display: flex; gap: 6px; }
+  .progress { height: 4px; background: var(--sunk); border-radius: 2px; margin-top: 8px; overflow: hidden; }
+  .progress i { display: block; height: 100%; background: var(--accent); transition: width .4s; }
+  .empty { color: var(--muted); max-width: 520px; }
+
+  dialog { border: 1px solid var(--line); border-radius: 14px; background: var(--panel); color: var(--text); padding: 20px; width: 420px;
+    box-shadow: 0 24px 60px rgba(0,0,0,.3); }
+  dialog::backdrop { background: rgba(10, 8, 20, .45); }
+  dialog h3 { margin: 0 0 14px; font-size: 17px; }
+  dialog input[type="text"] { width: 100%; height: 40px; padding: 0 12px; border-radius: var(--r-s); border: 1px solid var(--line); background: var(--bg); }
+  #settings { width: 460px; max-height: 86vh; }
+  .field { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); }
+  .field:first-of-type { border-top: 0; }
+  .field small { display: block; color: var(--muted); font-size: 12px; }
+  .field input[type="checkbox"] { accent-color: var(--accent); width: 17px; height: 17px; }
+  .field input[type="number"] { width: 64px; height: 32px; border-radius: var(--r-s); border: 1px solid var(--line); background: var(--bg); padding: 0 8px; }
+  .path { font-size: 12px; color: var(--muted); overflow-wrap: anywhere; }
+  .dlg-foot { display: flex; justify-content: space-between; gap: 8px; margin-top: 16px; }
+
+  .toast { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); background: var(--text); color: var(--bg);
+    padding: 10px 16px; border-radius: var(--r-s); z-index: 50; max-width: 70vw; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside>
+    <div class="brand">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M14 6h36a10 10 0 0 1 10 10v24a10 10 0 0 1-10 10H28l-12 9v-9h-2A10 10 0 0 1 4 40V16A10 10 0 0 1 14 6z" fill="#7c3aed"/>
+        <path d="M26 19v18l15-9z" fill="#fff"/>
+        <circle cx="52" cy="12" r="7" fill="#22c55e" stroke="var(--side)" stroke-width="3"/>
+      </svg>
+      <b>twitch</b>
+    </div>
+    <div class="navs">
+      <button class="nav" id="navExplore"><span class="ico">◎</span>Explore channels</button>
+      <button class="nav" id="navJoin"><span class="ico">＋</span>Join a channel <kbd>Ctrl K</kbd></button>
+      <button class="nav" id="navSubs"><span class="ico">★</span>Subscriptions <span class="count" id="subsCount"></span></button>
+      <button class="nav" id="navSaved"><span class="ico">⬇</span>Saved streams <span class="count" id="dlCount"></span></button>
+    </div>
+    <div class="scroll">
+      <div id="loginBox" hidden>
+        <p class="hint">Log in to see the channels you follow and get a notification when they go live.</p>
+        <div style="display:grid; gap:6px; margin: 4px 10px">
+          <button class="btn primary" id="ffBtn">Log in with Firefox</button>
+          <button class="btn" id="loginBtn">Log in with password</button>
+        </div>
+        <p class="hint">Use Firefox if you sign in to Twitch with Google, Apple or Facebook.</p>
+        <button class="nav" id="tokenBtn" style="font-weight:400;color:var(--muted)">Paste a login token instead</button>
+      </div>
+      <div class="group"><span>Live now</span><span id="liveCount"></span></div>
+      <div id="liveList"></div>
+      <div id="recentWrap" hidden>
+        <div class="group"><span>Recent</span><button id="clearRecent" title="Remove all recent channels">Clear all</button></div>
+        <div id="recentList"></div>
+      </div>
+      <div class="group"><button id="offToggle">▾ Followed channels</button><span><button id="refreshFollows" title="Reload your follow list from Twitch">⟳</button> <span id="offCount"></span></span></div>
+      <div id="followWrap">
+        <input type="text" id="followFilter" class="filter" placeholder="Search followed channels" spellcheck="false" hidden>
+        <div id="offList"></div>
+      </div>
+    </div>
+    <div class="me">
+      <span id="meAv" class="ph">?</span>
+      <div class="who"><div class="nm" id="meName">Not logged in</div><div class="sub" id="meSub">Guest</div></div>
+      <button class="iconbtn" id="gear" title="Settings" aria-label="Settings">⚙</button>
+    </div>
+  </aside>
+
+  <main>
+    <!-- channel -->
+    <section class="view" id="viewChannel" hidden>
+      <div class="head">
+        <img class="big" id="chAv" alt="">
+        <div class="info">
+          <h1 id="chName"></h1>
+          <div class="title" id="chTitle"></div>
+          <div class="stats" id="chStats"></div>
+        </div>
+        <div class="actions">
+          <div class="seg"><button id="tabLive" aria-pressed="true">Live</button><button id="tabPast" aria-pressed="false">Past broadcasts</button></div>
+          <button class="btn follow" id="followBtn">♡ Follow</button>
+          <button class="btn sub" id="subBtn">★ Subscribe</button>
+          <button class="btn" id="bellBtn" title="Notify me when this channel goes live">🔔 Notify</button>
+          <button class="btn rec" id="recBtn" title="Record every live stream you open">● Save streams</button>
+          <span class="recstate" id="recState"></span>
+          <button class="btn" id="hideVideo">Hide video</button>
+        </div>
+      </div>
+
+      <div class="stage" id="stage">
+        <div class="chatcol">
+          <button class="votebar" id="voteBar" hidden>
+            <span class="vb-ico">🗳</span>
+            <span class="vb-txt"><b id="voteKind">Poll running</b><span id="voteText"></span></span>
+            <span class="vb-go">Vote now</span>
+          </button>
+          <div class="chat"><webview id="chat" partition="persist:twitch" allowpopups></webview></div>
+        </div>
+        <div class="split" id="split" title="Drag to resize"></div>
+        <div class="video">
+          <div class="playerbox"><webview id="player" partition="persist:twitch" allowpopups></webview></div>
+          <div class="pctl">
+            <span class="label" id="pLabel"></span>
+            <span class="shield" id="shield" title="Ad segments removed this session"></span>
+            <button class="lag" id="lag" hidden title="How far behind live you are. Click to jump to live.">LIVE</button>
+            <button class="btn" id="vodDl" hidden>Download</button>
+            <button class="btn" id="backLive" hidden>Back to live</button>
+            <select id="quality" title="Video quality">
+              <option value="auto">Auto</option><option value="chunked">Source</option><option value="1080p60">1080p60</option>
+              <option value="720p60">720p60</option><option value="720p30">720p</option><option value="480p30">480p</option>
+              <option value="360p30">360p</option><option value="160p30">160p</option>
+            </select>
+            <button class="iconbtn" id="pip" title="Picture in picture" aria-label="Picture in picture">⧉</button>
+            <button class="iconbtn" id="fs" title="Fullscreen" aria-label="Fullscreen">⛶</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="page" id="pastPage" hidden>
+        <h2>Past broadcasts</h2>
+        <p class="lead">Watch here, or download to keep.</p>
+        <div class="grid" id="pastGrid"></div>
+      </div>
+    </section>
+
+    <!-- explore -->
+    <section class="view" id="viewExplore">
+      <div class="page">
+        <h2>Explore channels</h2>
+        <p class="lead">Pick a stream to start watching, or search for a channel.</p>
+        <form class="searchbar" id="searchForm">
+          <input type="text" id="searchInput" placeholder="Search channels" spellcheck="false" autocomplete="off">
+          <button class="btn primary" type="submit">Search</button>
+          <button class="btn" type="button" id="searchClear" hidden>Clear</button>
+        </form>
+        <div id="searchWrap" hidden>
+          <h3 id="searchTitle">Results</h3>
+          <div class="grid" id="searchGrid"></div>
+        </div>
+        <div id="exFollowWrap" hidden>
+          <h3>Live from channels you follow</h3>
+          <div class="grid" id="exFollow"></div>
+        </div>
+        <h3>Top live channels</h3>
+        <div class="grid" id="exTop"><p class="empty">Loading…</p></div>
+      </div>
+    </section>
+
+    <!-- subscriptions -->
+    <section class="view" id="viewSubs" hidden>
+      <div class="page">
+        <h2>Subscriptions</h2>
+        <p class="lead">Channels you're subscribed to. Pick one to see their past streams.</p>
+        <div style="display:flex; gap:8px; margin-bottom:18px">
+          <button class="btn" id="refreshSubs">Refresh</button>
+          <button class="btn" id="manageSubs">Manage subscriptions</button>
+        </div>
+        <div class="grid" id="subsGrid"></div>
+      </div>
+    </section>
+
+    <!-- saved -->
+    <section class="view" id="viewSaved" hidden>
+      <div class="page">
+        <h2>Saved streams</h2>
+        <p class="lead" id="savedDir"></p>
+        <div style="display:flex; gap:8px; margin-bottom:18px">
+          <button class="btn" id="refreshSaved">Refresh</button>
+          <button class="btn" id="openDir">Open folder</button>
+        </div>
+        <div class="list" id="savedList"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<dialog id="join">
+  <h3>Join a channel</h3>
+  <form id="joinForm" method="dialog"><input type="text" id="joinInput" placeholder="Channel name, e.g. caseoh_" spellcheck="false" autocomplete="off"></form>
+</dialog>
+
+<dialog id="tokenDlg">
+  <h3>Log in with your browser's login</h3>
+  <p style="margin:0 0 10px;color:var(--muted)">Use this if Twitch makes you sign in with Google, Apple or Facebook and that won't work here.</p>
+  <ol style="margin:0 0 14px;padding-left:20px;line-height:1.6">
+    <li>In Firefox, go to twitch.tv and make sure you're logged in.</li>
+    <li>Press F12, open the <b>Storage</b> tab, then <b>Cookies</b> and <b>https://www.twitch.tv</b>.</li>
+    <li>Find the row named <b>auth-token</b> and copy its value.</li>
+  </ol>
+  <input type="text" id="tokenInput" placeholder="Paste the auth-token value" spellcheck="false" autocomplete="off">
+  <p style="margin:10px 0 0;font-size:12px;color:var(--muted)">This value is like your password. Only paste it here, never send it to anyone.</p>
+  <div class="dlg-foot"><button class="btn" id="tokenCancel">Cancel</button><button class="btn primary" id="tokenSave">Log in</button></div>
+</dialog>
+
+<dialog id="settings">
+  <h3>Settings</h3>
+  <div class="field"><div>Twitch account<small id="acctState">Not logged in</small></div>
+    <span style="display:flex;gap:6px"><button class="btn primary" id="ffBtn2">Log in with Firefox</button><button class="btn" id="loginBtn2">Password</button></span></div>
+  <div class="field"><div>Theme</div>
+    <div class="seg"><button id="thLight" aria-pressed="true">Light</button><button id="thDark" aria-pressed="false">Dark</button></div></div>
+  <div class="field"><div>Live notifications<small>When a channel you follow goes live</small></div><input type="checkbox" id="notify"></div>
+  <div class="field"><div>Keep running when closed<small>Stays in the tray so notifications still arrive</small></div><input type="checkbox" id="background"></div>
+  <div class="field"><div>Jump to live automatically<small>When you fall this many seconds behind</small></div>
+    <span><input type="checkbox" id="autoLive"> <input type="number" id="threshold" min="3" max="60"></span></div>
+  <div class="field"><div>Smooth catch-up<small>Plays at 1.1× until you're back near live</small></div><input type="checkbox" id="catchUp"></div>
+  <div class="field"><div>Block ads<small>Reloads the player when changed</small></div><input type="checkbox" id="adblock"></div>
+  <div class="field"><div>Recording quality</div>
+    <select id="recQuality"><option value="best">Best</option><option value="1080">1080p</option><option value="720">720p</option>
+      <option value="480">480p</option><option value="360">360p</option></select></div>
+  <div class="field"><div>Save folder<div class="path" id="saveDir"></div></div><button class="btn" id="changeDir">Change</button></div>
+  <div class="field"><div>yt-dlp<small id="ytStatus">Checking…</small></div><button class="btn" id="ytInstall">Install yt-dlp</button></div>
+  <div class="field"><div>Custom scripts<small>.js files here run in the player and chat</small></div><button class="btn" id="scriptsDir">Open</button></div>
+  <div class="dlg-foot">
+    <span><button class="btn" id="logoutBtn">Log out</button> <button class="btn" id="quitBtn">Quit app</button></span>
+    <button class="btn primary" id="closeSettings">Done</button>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" hidden></div>
+<script src="renderer.js"></script>
+</body>
+</html>
