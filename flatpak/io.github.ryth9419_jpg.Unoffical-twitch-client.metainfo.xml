@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.ryth9419_jpg.Unoffical-twitch-client</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <name>Unofficial Twitch Client</name>
+  <summary>Watch Twitch with notifications and lower delay</summary>
+  <developer id="io.github.ryth9419_jpg">
+    <name>ryth9419-jpg</name>
+  </developer>
+  <description>
+    <p>A desktop Twitch app with live notifications, lower delay, stream saving and ad blocking.</p>
+    <ul>
+      <li>Followed channels and subscriptions in the sidebar</li>
+      <li>Notifications when channels you follow go live</li>
+      <li>Full chat with emotes, polls and predictions</li>
+      <li>Behind-live counter with jump to live</li>
+      <li>Save live streams and download past broadcasts</li>
+      <li>Channel search, quality picker, picture-in-picture</li>
+      <li>Light and dark themes</li>
+    </ul>
+    <p>Not affiliated with or endorsed by Twitch Interactive, Inc.</p>
+  </description>
+  <launchable type="desktop-id">io.github.ryth9419_jpg.Unoffical-twitch-client.desktop</launchable>
+  <url type="homepage">https://github.com/ryth9419-jpg/Unoffical-twitch-client</url>
+  <url type="bugtracker">https://github.com/ryth9419-jpg/Unoffical-twitch-client/issues</url>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="1.0.0" date="2026-11-11"/>
+  </releases>
+</component>

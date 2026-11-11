@@ -30,6 +30,22 @@ npm run dist
 
 The AppImage is created in `dist/`.
 
+## Flatpak
+
+Build and install locally with [flatpak-builder](https://docs.flatpak.org/en/latest/flatpak-builder.html):
+
+```bash
+flatpak install flathub org.flatpak.Builder org.freedesktop.Sdk//26.08 org.electronjs.Electron2.BaseApp//26.08
+flatpak run org.flatpak.Builder --user --install --force-clean build-dir flatpak/io.github.ryth9419_jpg.Unoffical-twitch-client.yml
+flatpak run io.github.ryth9419_jpg.Unoffical-twitch-client
+```
+
+The build is offline: Electron and the npm runtime dependencies are pinned by checksum. After changing `package-lock.json`, regenerate the npm sources:
+
+```bash
+python3 flatpak/gen-npm-sources.py package-lock.json > flatpak/npm-sources.json
+```
+
 ## Disclaimer
 
 Not affiliated with or endorsed by Twitch Interactive, Inc. MIT licensed.
